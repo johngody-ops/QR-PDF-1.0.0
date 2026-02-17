@@ -1,27 +1,20 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' blob: data:; connect-src 'self';">
     <title>QR PDF Organizer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
-    "react/": "https://esm.sh/react@19.0.0/",
-    "jsqr": "https://esm.sh/jsqr@1.4.0",
-    "jspdf": "https://esm.sh/jspdf@2.5.1",
-    "pdfjs-dist": "https://esm.sh/pdfjs-dist@4.10.38"
-  }
-}
-</script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl0HPNiecjHG182reT7tlYepKoiVYB2/WI36UapGBbCMl+OF/3yYPME8XWKEMBO468tBRBiN5LkjWQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    >
 </head>
 <body class="bg-gray-50 text-gray-900 min-h-screen">
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>

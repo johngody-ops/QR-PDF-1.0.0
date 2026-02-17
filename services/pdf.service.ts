@@ -1,9 +1,10 @@
 
 import * as pdfjsLib from 'pdfjs-dist';
+import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import { jsPDF } from 'jspdf';
 import { ScannedFile } from '../types';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://esm.sh/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 export async function extractPdfPages(file: File): Promise<string[]> {
   const arrayBuffer = await file.arrayBuffer();
@@ -42,15 +43,17 @@ export async function createPdf(files: ScannedFile[], name: string): Promise<voi
 }
 
 function getBase64(url: string): Promise<string> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'Anonymous';
     img.onload = () => {
       const c = document.createElement('canvas');
-      c.width = img.width; c.height = img.height;
+      c.width = img.width;
+      c.height = img.height;
       c.getContext('2d')?.drawImage(img, 0, 0);
       resolve(c.toDataURL('image/jpeg', 0.8));
     };
+    img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
     img.src = url;
   });
 }

@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ScannedFile, AppStatus } from './types';
 import { scanQrCode } from './services/qr.service';
 import { extractPdfPages, createPdf } from './services/pdf.service';
@@ -25,19 +25,19 @@ const App: React.FC = () => {
         try {
           const pages = await extractPdfPages(f);
           pages.forEach((p, i) => newItems.push({ 
-            id: Math.random().toString(36).substr(2, 9), 
+            id: crypto.randomUUID(), 
             file: f, 
             previewUrl: p, 
             qrData: null, 
             status: 'pending', 
             timestamp: Date.now() + i 
           }));
-        } catch (err) {
-          console.error("PDF Error:", err);
+        } catch {
+          // PDF extraction failed, skip this file silently
         }
       } else {
         newItems.push({ 
-          id: Math.random().toString(36).substr(2, 9), 
+          id: crypto.randomUUID(), 
           file: f, 
           previewUrl: URL.createObjectURL(f), 
           qrData: null, 
@@ -243,7 +243,7 @@ const App: React.FC = () => {
                             {groupFiles.map((f, idx) => (
                               <div key={f.id} className="relative group/thumb cursor-zoom-in" onClick={() => setSelectedImage(f.previewUrl)}>
                                 <div className="aspect-[3/4] rounded-xl overflow-hidden border border-slate-100 shadow-sm transition-all group-hover/thumb:border-indigo-400 group-hover/thumb:ring-4 group-hover/thumb:ring-indigo-50">
-                                  <img src={f.previewUrl} className="w-full h-full object-cover" alt="page" />
+                                  <img src={f.previewUrl} className="w-full h-full object-cover" alt={`Page ${idx + 1} of document ${id}`} />
                                   <div className="absolute top-1.5 right-1.5 bg-black/60 text-white text-[8px] font-black px-1.5 py-0.5 rounded-md backdrop-blur-md border border-white/20">
                                     #{idx+1}
                                   </div>
@@ -294,7 +294,7 @@ const App: React.FC = () => {
                     {[...groupsData.pending, ...groupsData.unsorted].map(f => (
                       <div key={f.id} className="bg-white p-4 rounded-[2rem] border border-slate-200 shadow-sm transition-all hover:border-indigo-400 hover:shadow-xl group/item relative flex flex-col">
                         <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 bg-slate-100 border border-slate-100 cursor-zoom-in group-hover/item:scale-[1.02] transition-transform duration-500" onClick={() => setSelectedImage(f.previewUrl)}>
-                          <img src={f.previewUrl} className="w-full h-full object-cover opacity-80 group-hover/item:opacity-100 transition-opacity" />
+                          <img src={f.previewUrl} className="w-full h-full object-cover opacity-80 group-hover/item:opacity-100 transition-opacity" alt={`Preview of ${f.file.name}`} />
                           <ScannerOverlay status={f.status} />
                         </div>
                         
@@ -370,7 +370,7 @@ const App: React.FC = () => {
            </div>
            
            <div className="relative group max-h-full max-w-full overflow-hidden rounded-3xl shadow-2xl shadow-black/50 border border-white/10" onClick={(e) => e.stopPropagation()}>
-             <img src={selectedImage} className="max-h-[85vh] object-contain transition-transform duration-700 hover:scale-[1.02]" />
+             <img src={selectedImage} className="max-h-[85vh] object-contain transition-transform duration-700 hover:scale-[1.02]" alt="Full-size page preview" />
              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/60 text-white text-[10px] font-black uppercase tracking-widest px-6 py-2 rounded-full border border-white/10 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
                Детальный просмотр страницы
              </div>
