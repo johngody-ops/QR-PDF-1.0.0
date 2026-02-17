@@ -1,6 +1,3 @@
-
-import React from 'react';
-
 interface HeaderProps {
   isImporting: boolean;
   onFilesAdd: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -10,7 +7,7 @@ interface HeaderProps {
   canDownloadAll: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ 
+export const Header = ({ 
   isImporting, 
   onFilesAdd, 
   onClear, 
